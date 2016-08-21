@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IMAGE</title>
+	<script type="text/javascript" src="saveSvgAsPng/saveSvgAsPng.js"></script>
+	<script type="text/javascript" src="MaterialImageGenerator.js"></script>
+	<style type="text/css">
+		body {
+			margin: 0;
+			overflow: hidden;
+		}
+
+		#btn {
+			position: absolute;
+			bottom: 10%;
+			right: 10%;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background: #e53935;
+			box-shadow: 0px 2px 3px 1px #000;
+			cursor: pointer;
+		}
+
+		#btn:after {
+			content: '';
+			display: block;
+			width: 50px;
+			height: 50px;
+			background: url('https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_replay_white_24px.svg') no-repeat center;
+			position: absolute;
+		}
+
+		#btn:hover {
+			transition: all 100ms linear;
+			background: #b71c1c;
+		}
+
+		#btn:active {
+			box-shadow: 0px 0px 5px 1px #000;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="board"></div>
+	<div id="btn"></div>
+
+	<script type="text/javascript">
+		window.onload = function() {
+			var board = document.getElementById("board");
+			var btn = document.getElementById("btn");
+
+			var materialImageGenerator = new MaterialImageGenerator({
+				width: window.innerWidth,
+				height:window.innerHeight,
+				holder:board,
+				animation: true,
+				count: 5
+			});
+
+			materialImageGenerator.make();
+
+			btn.addEventListener("click", function(e) {
+				materialImageGenerator.make();
+			});
+		}
+	</script>
+</body>
+</html>
