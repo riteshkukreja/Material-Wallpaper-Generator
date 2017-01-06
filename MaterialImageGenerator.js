@@ -5,7 +5,7 @@ var MaterialImageGenerator = function(config) {
 	var width = 2000;
 	var height = 2000;
 	var holder = document.body;
-	var colors = [];
+	var colors = ["#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50", "#f1c40f", "#e67e22", "#e74c3c", "#f39c12", "#d35400", "#c0392b", "#7f8c8d", "#bdc3c7"];
 	var backgroundColor = '';
 	var animation = false;
 	var count = 1;
@@ -14,7 +14,7 @@ var MaterialImageGenerator = function(config) {
 		return Math.floor(Math.random() * (max-min)) + min;
 	}
 
-	var parallelLines = function() {
+	var parallelLines = function(color) {
 		var rect = document.createElementNS(svgNS,'rect');
 		rect.setAttribute('x', -height);
 		rect.setAttribute('y', getRandomInt(0, height));
@@ -23,44 +23,72 @@ var MaterialImageGenerator = function(config) {
 
 		var rotation = getRandomInt(-90, 90);
 
-		rect.setAttribute('style', 'transform-origin: 0% 50%; transform: rotateZ(' + Math.floor(rotation) + 'deg); fill:' + randomColor());
+		rect.setAttribute('style', 'transform-origin: 0% 50%; transform: rotateZ(' + Math.floor(rotation) + 'deg); fill:' + color);
 
 		return rect;
 	}
 
-	var line = function() {
+	var line = function(color) {
 		var lines = document.createElementNS(svgNS, 'path');
 		var d = 'M0 ' + getRandomInt(0, height) + ' L' + width + ' ' + getRandomInt(0, height) + ' L' +width + ' ' + height + ' L0 ' + height + ' Z';
 		lines.setAttribute('d', d);
-		lines.setAttribute('style', 'fill:' + randomColor());
+		lines.setAttribute('style', 'fill:' + color);
 
 		return lines;
 	}
 
-	var circles = function() {
+	var circles = function(color) {
 		var circle = document.createElementNS(svgNS, 'circle');
 		circle.setAttribute('cx', getRandomInt(0, width));
 		circle.setAttribute('cy', getRandomInt(0, height));
 		circle.setAttribute('r', getRandomInt(50, 500));
 
-		circle.setAttribute('style', 'fill:' + randomColor());
+		circle.setAttribute('style', 'fill:' + color);
 		return circle;
 	}
 
-	var curveLines = function() {
+	var rect = function(color) {
+		var circle = document.createElementNS(svgNS, 'rect');
+		circle.setAttribute('x', getRandomInt(0, width));
+		circle.setAttribute('y', getRandomInt(0, height));
+		circle.setAttribute('width', getRandomInt(0, width));
+		circle.setAttribute('height', getRandomInt(0, height));
+
+		circle.setAttribute('style', 'fill:' + color);
+		return circle;
+	}
+
+	var curveLines = function(color) {
 		var lines = document.createElementNS(svgNS, 'path');
 		var d = 'M0 ' + getRandomInt(0, height) + ' T' + width/2 + ' ' + getRandomInt(0, height) + ' ' + width + ' ' + getRandomInt(0, height) + ' L' +width + ' ' + height + ' L0 ' + height + ' Z';
 		lines.setAttribute('d', d);
-		lines.setAttribute('style', 'fill:' + randomColor());
+		lines.setAttribute('style', 'fill:' + color);
 
 		return lines;
 	}
 
-	var triangles = function() {
+	var randomLines = function(color) {
 		var lines = document.createElementNS(svgNS, 'path');
-		var d = 'M' + getRandomInt(0, width) + ' ' + getRandomInt(0, height) + ' L' + getRandomInt(0, width) + ' ' + getRandomInt(0, height) + ' L' + getRandomInt(0, width) + ' ' + getRandomInt(0, height) + ' Z';
+		var d = 'M0 ' + getRandomInt(0, height);
+		
+		var points = getRandomInt(2, 10);
+		for(var i = 0; i < points; i++) {
+			 d += ' T' + getRandomInt(0, width/2) + ' ' + getRandomInt(0, height) + ' ' + getRandomInt(0, width) + ' ' + getRandomInt(0, height) + ' L' + getRandomInt(0, width) + ' ' + getRandomInt(0, height);
+		}
+
+		d += ' Z';
+
 		lines.setAttribute('d', d);
-		lines.setAttribute('style', 'fill:' + randomColor());
+		lines.setAttribute('style', 'fill:' + color);
+
+		return lines;
+	}
+
+	var triangles = function(color) {
+		var lines = document.createElementNS(svgNS, 'path');
+		var d = 'M' + getRandomInt(0, width) + ' ' + getRandomInt(200, height) + ' L' + getRandomInt(200, width) + ' ' + getRandomInt(200, height) + ' L' + getRandomInt(200, width) + ' ' + getRandomInt(200, height) + ' Z';
+		lines.setAttribute('d', d);
+		lines.setAttribute('style', 'fill:' + color);
 
 		return lines;
 	}
@@ -73,6 +101,35 @@ var MaterialImageGenerator = function(config) {
 		if(colors.length == 0)
 			return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 		return colors[getRandomInt(0, colors.length)];
+	}
+
+	var MOD = function(val, offset) {
+		if(offset < 0) return false;
+
+		if(val < 0) return MOD(val+offset, offset);
+		return val % offset;
+	}
+
+	var similarColor = function(color) {
+		// color is in hex form #rrggbb
+		var offset = 50;
+		var red = parseInt(color[1] + color[2], 16);
+		var green = parseInt(color[3] + color[4], 16);
+		var blue = parseInt(color[5] + color[6], 16);
+
+		var redT = red + getRandomInt(-offset, 0);
+		var greenT = green + getRandomInt(-offset, 0);
+		var blueT = blue + getRandomInt(-offset, 0);
+
+		redT = MOD(redT, 256);
+		blueT = MOD(blueT, 256);
+		greenT = MOD(greenT, 256);
+
+		var redStr = redT < 16 ? '0' + redT.toString(16) : redT.toString(16);
+		var greenStr = greenT < 16 ? '0' + greenT.toString(16) : greenT.toString(16);
+		var blueStr = blueT < 16 ? '0' + blueT.toString(16) : blueT.toString(16);
+
+		return '#' + redStr + greenStr + blueStr;
 	}
 
 	var Animation = function(width, height, color) {
@@ -135,8 +192,6 @@ var MaterialImageGenerator = function(config) {
 
 		if(backgroundColor.length == 0) {
 			var baseColor = randomColor();
-			while(baseColor > "#aaaaaa")
-				baseColor = randomColor();
 
 			build(baseColor);
 		} else {
@@ -145,9 +200,9 @@ var MaterialImageGenerator = function(config) {
 
 		svg.innerHTML = "";
 		var time = getRandomInt(1, count+1);
+		var op = ops[getRandomInt(0, ops.length)];
 		for(var i = 0; i < time; i++) {
-			var op = ops[getRandomInt(0, ops.length)];
-			push(op());
+			push(op(similarColor(baseColor)));
 		}
 
 		buildImage();
@@ -180,8 +235,7 @@ var MaterialImageGenerator = function(config) {
 		});
 	}
 
-
-	var ops = [parallelLines, line, circles, curveLines, triangles];
+	var ops = [parallelLines, line, circles, curveLines, triangles, randomLines, rect];
 	var SVGFile = null;
 
 
@@ -217,7 +271,7 @@ var MaterialImageGenerator = function(config) {
 	}
 
 	var animator = new Animation(width, height, randomColor());
-	animator.build();
+	
 
 	var build = function(color) {
 		svg.setAttribute('width', width);
@@ -226,7 +280,11 @@ var MaterialImageGenerator = function(config) {
 		svg.setAttribute('id', "board");
 
 		holder.innerHTML = "";
-		holder.appendChild(animator.dom);
+
+		if(animation) {
+			animator.build();
+			holder.appendChild(animator.dom);
+		}
 	}
 
 }

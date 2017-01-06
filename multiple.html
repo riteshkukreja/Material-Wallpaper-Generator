@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IMAGE</title>
+	<script type="text/javascript" src="saveSvgAsPng/saveSvgAsPng.js"></script>
+	<script type="text/javascript" src="MaterialImageGenerator.js"></script>
+
+	<style type="text/css">
+		body {
+			margin: 0;
+			overflow: auto;
+		}
+
+		#board {
+			font-size: 0;
+		}
+
+		#board div {
+			display: inline-block;
+			width: 200px;
+			height: 200px;
+			margin: 0px;
+		}
+
+		#btn {
+			position: fixed;
+			bottom: 10%;
+			right: 10%;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background: #e53935;
+			box-shadow: 0px 2px 3px 1px #d32f2f;
+			cursor: pointer;
+		}
+
+		#btn:after {
+			content: '';
+			display: block;
+			width: 50px;
+			height: 50px;
+			background: url('https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_replay_white_24px.svg') no-repeat center;
+			position: absolute;
+		}
+
+		#btn:hover {
+			transition: all 100ms linear;
+			background: #b71c1c;
+		}
+
+		#btn:active {
+			box-shadow: 0px 0px 5px 1px #000;
+		}
+
+		#btn.animate {
+			animation: ss 1s linear forwards;
+		}
+
+		@keyframes ss {
+			30%, 70% {
+				bottom: -50%;
+				right: -50%;
+				width: 200vw;
+				height: 200vw;
+			}
+
+			0%, 100% {
+				width: 50px;
+				height: 50px;
+				bottom: 10%;
+				right: 10%;
+			}
+		}
+
+		#slide {
+			width: 100vw;
+			height: 100vh;
+			background: rgba(20, 20, 20, .9);
+			display: none;
+		}
+
+		#slide.show {
+			display: block;
+			position: fixed;
+			top: 0;
+			left: 0;
+		}
+
+		#slide div {
+			width: 80vw;
+			height: 80vh;
+
+			position: absolute;
+			top: calc(50% - 40vh);
+			left: calc(50% - 40vw);
+		}
+
+		#slide div img, #board div img {
+			width: 100%;
+			height: 100%;
+			background-size: cover; 
+		}
+	</style>
+</head>
+<body>
+
+	<div id="board"></div>
+	<div id="btn"></div>
+	<div id="slide"></div>
+
+	<script type="text/javascript">
+		var wallpapers = [];
+		var width = 1920, height = 1080;
+		
+		var Block = function() {
+			var div = document.createElement('div');
+			div.className = "image_block";
+			var materialImageGenerator = new MaterialImageGenerator({
+				width: 		width,
+				height: 	height,
+				holder: 	div,
+				animation: 	false,
+				count: 		20
+			});
+
+			materialImageGenerator.make();
+
+			div.addEventListener('click', function() {
+				document.getElementById("slide").className = "show";
+				document.getElementById("slide").innerHTML = "";
+				var clone = div.cloneNode(true);
+				document.getElementById("slide").appendChild(clone);
+
+				document.getElementById("slide").addEventListener('click', function() {
+					document.getElementById("slide").className = "";
+					document.getElementById("slide").innerHTML = "";
+				});
+			});
+
+			wallpapers.push(materialImageGenerator);
+			return div;
+		}
+
+		var slideShow = function() {
+
+		}
+
+		var clear = function() {
+			board.innerHTML = "";
+			wallpapers = [];
+		}
+
+		var AllBlocks = function() {
+			var board = document.getElementById("board");
+			var blocks = 50;
+
+			for(var i = 0; i < blocks; i++) {
+				board.appendChild(Block());
+			}
+		}
+
+		var Make = function() {
+			for(var wall of wallpapers) {
+				wall.make();
+			}
+		}
+
+		window.onload = function() {
+
+			var btn = document.getElementById("btn");
+			clear();
+			AllBlocks();
+			document.body.scrollTop = 0;
+
+			btn.addEventListener("click", function(e) {
+				btn.className = "animate";
+
+				setTimeout(Make, 200);
+
+				setTimeout(function() {
+					btn.className = "";
+				}, 1000) ;
+			});
+			
+			var items = 50;
+			window.addEventListener("scroll", function(e) {
+				var scrolled = this.scrollY;
+				var lines = Math.floor(items * 200 / window.innerWidth);
+				if(scrolled > lines * 150) {
+					AllBlocks();
+					items += 50;
+				}
+			});
+
+
+		}
+	</script>
+
+</body>
+</html>
