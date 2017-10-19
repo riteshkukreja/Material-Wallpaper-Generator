@@ -11,28 +11,28 @@ materialWallpaperGenerator.make();
 The object can be configured with a Config Object.
 
 ## Config Object
-###width
+### width
 Width of the final Image. Default width is 2000px.
 
-###height
+### height
 Height of the final Image. Default height is 2000px.
 
-###holder
+### holder
 The document element which would hold the final image element. Default is **document.body**
 
-###bg
+### bg
 Takes a Hex Color code or RGB color code to fix the background color of the image. Default configuration selects a random color.
   
-###colors
+### colors
 List of colors codes which restricts the colors used in the image. Default configuration takes all the colors.
   
-###animation
+### animation
 Boolean value to animate creation of a new image. Adds a loader to the holder to be shown during image creation. Default is false.
 
-###count
+### count
 Number of objects to be added to the image. Default value is 1.
 
-##Example
+## Example
 
 ```js
 var materialImageGenerator = new MaterialImageGenerator({
