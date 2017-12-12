@@ -1,0 +1,21 @@
+{
+  "name": "material-wallpaper-generator",
+  "version": "1.0.0",
+  "description": "Material Wallpaper Generator is a JavaScript Plugin to Build Material Wallpapers using SVG.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riteshkukreja/Material-Wallpaper-Generator.git"
+  },
+  "keywords": [
+    "Material",
+    "Wallpaper",
+    "javascript",
+    "generator"
+  ],
+  "author": "Ritesh Kukreja <ritesh101094@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/riteshkukreja/Material-Wallpaper-Generator/issues"
+  },
+  "homepage": "https://github.com/riteshkukreja/Material-Wallpaper-Generator#readme"
+}
