@@ -1,5 +1,5 @@
 # Material-Wallpaper-Generator
-Material Wallpaper Generator is a JavaScript Plugin to Build Material Wallpapers using SVG. Plugin requires 'saveSvgAsPng' js provided by exupero.
+Material Wallpaper Generator is a JavaScript Plugin to Build Material Wallpapers using SVG. Plugin requires 'saveSvgAsPng' js provided by exupero. [Demo](https://riteshkukreja.github.io/Material-Wallpaper-Generator/)
 
 ## Usage
 
@@ -44,3 +44,9 @@ var materialImageGenerator = new MaterialImageGenerator({
 });
 materialImageGenerator.make();
 ```
+
+## Screenshots
+![](demo/screenshot1.png)
+![](demo/screenshot2.png)
+![](demo/screenshot3.png)
+![](demo/screenshot4.png)

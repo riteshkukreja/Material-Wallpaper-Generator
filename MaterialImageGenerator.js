@@ -263,7 +263,7 @@ var MaterialImageGenerator = function(config) {
 		});
 	}
 
-	var ops = [parallelLines, line, circles, curveLines, triangles, randomLines, rect];
+	var ops = [parallelLines, line, circles, curveLines, rect];
 	var SVGFile = null;
 
 
