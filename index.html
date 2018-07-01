@@ -2,68 +2,63 @@
 <html>
 <head>
 	<title>IMAGE</title>
-	<script type="text/javascript" src="saveSvgAsPng/saveSvgAsPng.js"></script>
-	<script type="text/javascript" src="MaterialImageGenerator.js"></script>
-	<style type="text/css">
-		body {
-			margin: 0;
-			overflow: hidden;
-		}
-
-		#btn {
-			position: absolute;
-			bottom: 10%;
-			right: 10%;
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			background: #e53935;
-			box-shadow: 0px 2px 3px 1px #000;
-			cursor: pointer;
-		}
-
-		#btn:after {
-			content: '';
-			display: block;
-			width: 50px;
-			height: 50px;
-			background: url('https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_replay_white_24px.svg') no-repeat center;
-			position: absolute;
-		}
-
-		#btn:hover {
-			transition: all 100ms linear;
-			background: #b71c1c;
-		}
-
-		#btn:active {
-			box-shadow: 0px 0px 5px 1px #000;
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 	<div id="board"></div>
 	<div id="btn"></div>
+	<section id="config_panel">
+		<div>
+			<h4>Number of Objects: <output id="myRangeValue">10</output></h4>
+			<div class="slidecontainer">
+				<input type="range" min="1" max="20" value="10" class="slider" id="myRange">
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript" src="saveSvgAsPng/saveSvgAsPng.js"></script>
+	<script type="text/javascript" src="MaterialImageGenerator.js"></script>
 
 	<script type="text/javascript">
 		window.onload = function() {
-			var board = document.getElementById("board");
-			var btn = document.getElementById("btn");
+			const board = document.getElementById("board");
+			const btn = document.getElementById("btn");
+			const slider = document.getElementById("myRange");
+			const outputRangeValue = document.getElementById("myRangeValue");
 
-			var materialImageGenerator = new MaterialImageGenerator({
+			const config = {
 				width: window.innerWidth,
 				height:window.innerHeight,
 				holder:board,
 				animation: true,
-				count: 20
-			});
+				count: slider.value
+			};
 
-			materialImageGenerator.make();
+			let materialImageGenerator = new MaterialImageGenerator(config);
+			let settleDownTimer = null;
+
+			slider.oninput = function() {
+				config.count = this.value;
+				outputRangeValue.innerText = this.value;
+
+				if(settleDownTimer) {
+					clearTimeout(settleDownTimer);
+					settleDownTimer = null;
+				}
+				
+				settleDownTimer = setTimeout(() => {
+					materialImageGenerator = new MaterialImageGenerator(config);
+					materialImageGenerator.make();
+				}, 500);
+			};
 
 			btn.addEventListener("click", function(e) {
 				materialImageGenerator.make();
 			});
+			
+			/** Create one on boot **/
+			materialImageGenerator.make();
 		}
 	</script>
 </body>

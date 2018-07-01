@@ -199,10 +199,12 @@ var MaterialImageGenerator = function(config) {
 		}
 
 		svg.innerHTML = "";
-		var time = getRandomInt(1, count+1);
+		var time = count;
 		var op = ops[getRandomInt(0, ops.length)];
+		var color = Math.random() > 0.5 ? randomColor(): similarColor(baseColor);
+
 		for(var i = 0; i < time; i++) {
-			push(op(similarColor(baseColor)));
+			push(op(color));
 		}
 
 		buildImage();
